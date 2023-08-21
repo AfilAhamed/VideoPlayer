@@ -62,7 +62,7 @@ class FavoriteVideoList extends StatelessWidget {
                         ActionPane(motion: const DrawerMotion(), children: [
                       SlidableAction(
                         onPressed: (context) {
-                          deleteFavfromDB(index);
+                          deleteFavfromDB(context, index);
                         },
                         icon: Icons.delete,
                         label: 'Delete',
