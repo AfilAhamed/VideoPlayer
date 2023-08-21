@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:videoplayer_miniproject/screens/settings/about.dart';
+import 'package:videoplayer_miniproject/screens/settings/reset.dart';
 import 'package:videoplayer_miniproject/screens/settings/terms_condition.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -92,28 +93,33 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.1,
-                width: MediaQuery.of(context).size.width * 0.6,
-                decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(50)),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.restart_alt_outlined,
-                        color: Colors.white, size: 33),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      'Reset Settings',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 21,
+              GestureDetector(
+                onTap: () async {
+                  resetDB(context);
+                },
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(50)),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.restart_alt_outlined,
+                          color: Colors.white, size: 33),
+                      SizedBox(
+                        width: 10,
                       ),
-                    )
-                  ],
+                      Text(
+                        'Reset Settings',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 21,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(
