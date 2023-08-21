@@ -171,7 +171,8 @@ class _VideoListState extends State<VideoList> {
                         spacing: 5,
                         onPressed: (context) {
                           //delete
-                          deletefromDB(index);
+                          deleteFromDB(context, index);
+                          // deletefromDB(,index);
                         },
                         icon: Icons.delete,
                         backgroundColor: Colors.red,
