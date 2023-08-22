@@ -30,7 +30,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         setState(() {});
       });
 
-    _controlsTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+    _controlsTimer = Timer.periodic(const Duration(seconds: 5), (_) {
       setState(() {
         _controlsVisible = false;
       });
@@ -42,7 +42,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       _controlsVisible = !_controlsVisible;
       if (_controlsVisible) {
         _controlsTimer.cancel();
-        _controlsTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+        _controlsTimer = Timer.periodic(const Duration(seconds: 5), (_) {
           setState(() {
             _controlsVisible = false;
           });
@@ -54,7 +54,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   //reset the controls timer
   void _resetControlsTimer() {
     _controlsTimer.cancel();
-    _controlsTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+    _controlsTimer = Timer.periodic(const Duration(seconds: 5), (_) {
       setState(() {
         _controlsVisible = false;
       });
