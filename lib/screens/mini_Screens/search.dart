@@ -53,7 +53,15 @@ class VideoSearchScreenState extends State<VideoSearchScreen> {
                   color: Colors.orange.shade700,
                   size: 30,
                 ),
-                hintText: 'Search here',
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      _searchController.clear();
+                    },
+                    icon: const Icon(
+                      Icons.clear,
+                      color: Colors.blue,
+                    )),
+                hintText: 'Search here...',
                 hintStyle: const TextStyle(color: Colors.black, fontSize: 20),
               ),
             ),
