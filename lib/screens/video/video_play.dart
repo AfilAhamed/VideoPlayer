@@ -68,6 +68,24 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     super.dispose();
   }
 
+  //Double tap function----------------
+
+  void _handleDoubleTap(bool forward) {
+    final currentPosition = _controller.value.position;
+    final seekTime = forward ? 10 : -10;
+    final newPosition = currentPosition + Duration(seconds: seekTime);
+
+    final videoDuration = _controller.value.duration;
+
+    final clampedPosition = newPosition > Duration.zero
+        ? (newPosition < videoDuration ? newPosition : videoDuration)
+        : Duration.zero;
+
+    _controller.seekTo(clampedPosition);
+
+    _resetControlsTimer();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -83,6 +101,8 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         return true; // Allow default back button behavior
       },
       child: GestureDetector(
+        onDoubleTapDown: (details) => _handleDoubleTap(
+            details.localPosition.dx >= MediaQuery.of(context).size.width / 2),
         onTap: () {
           setState(() {
             _toggleControls();

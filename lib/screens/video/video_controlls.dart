@@ -131,16 +131,16 @@ class _VideoControlsState extends State<VideoControls> {
                     ),
                     IconButton(
                       onPressed: () {
-                        if (widget._controller.value.position -
-                                const Duration(seconds: 10) >
-                            Duration.zero) {
-                          widget._controller.seekTo(
-                              widget._controller.value.position -
-                                  const Duration(seconds: 10));
-                        }
+                        // if (widget._controller.value.position -
+                        //         const Duration(seconds: 10) >
+                        //     Duration.zero) {
+                        //   widget._controller.seekTo(
+                        //       widget._controller.value.position -
+                        //           const Duration(seconds: 10));
+                        // }
                       },
                       icon: const Icon(
-                        Icons.replay_10,
+                        Icons.skip_previous_rounded,
                         color: Colors.white,
                       ),
                     ),
@@ -163,16 +163,16 @@ class _VideoControlsState extends State<VideoControls> {
                     ),
                     IconButton(
                       onPressed: () {
-                        if (widget._controller.value.position +
-                                const Duration(seconds: 10) <
-                            widget._controller.value.duration) {
-                          widget._controller.seekTo(
-                              widget._controller.value.position +
-                                  const Duration(seconds: 10));
-                        }
+                        // if (widget._controller.value.position +
+                        //         const Duration(seconds: 10) <
+                        //     widget._controller.value.duration) {
+                        //   widget._controller.seekTo(
+                        //       widget._controller.value.position +
+                        //           const Duration(seconds: 10));
+                        // }
                       },
                       icon: const Icon(
-                        Icons.forward_10,
+                        Icons.skip_next_rounded,
                         color: Colors.white,
                       ),
                     ),
