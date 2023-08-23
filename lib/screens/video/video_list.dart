@@ -172,7 +172,6 @@ class _VideoListState extends State<VideoList> {
                         onPressed: (context) {
                           //delete
                           deleteFromDB(context, index);
-                          // deletefromDB(,index);
                         },
                         icon: Icons.delete,
                         backgroundColor: Colors.red,
@@ -193,7 +192,6 @@ class _VideoListState extends State<VideoList> {
                               (favoriteVideo) =>
                                   favoriteVideo.favvideoPath == video.videoPath,
                             );
-
                             if (isFavorite) {
                               final favoriteVideo =
                                   favoriteVideoBox.values.firstWhere(
@@ -209,9 +207,8 @@ class _VideoListState extends State<VideoList> {
                               );
                               favoriteVideoBox.add(favoriteVideo);
                             }
-
                             // Provide haptic feedback
-                            HapticFeedback.lightImpact();
+                            //HapticFeedback.heavyImpact();
                           });
                         },
                         icon: Icon(
@@ -245,7 +242,6 @@ class _VideoListState extends State<VideoList> {
           },
         ),
       ),
-
       // to add videos
       floatingActionButton: FloatingActionButton(
         onPressed: () => _pickVideo(context),
