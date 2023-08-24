@@ -6,8 +6,6 @@ import 'package:video_player/video_player.dart';
 import 'package:videoplayer_miniproject/model/favorite_model/favorite_model.dart';
 import 'package:videoplayer_miniproject/screens/favorite/controlls_favorite.dart';
 
-import '../../bottombar.dart';
-
 class FavoritePlayer extends StatefulWidget {
   final FavoriteVideoModel favModel;
 
@@ -123,12 +121,7 @@ class FavoritePlayerState extends State<FavoritePlayer> {
                                 DeviceOrientation.portraitUp,
                                 DeviceOrientation.portraitDown,
                               ]);
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const BottomBar(),
-                                  ));
-                              // Navigator.pop(context);
+                              Navigator.pop(context);
                             },
                             icon: const Icon(Icons.arrow_back)),
                         title: Text(

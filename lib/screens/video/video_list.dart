@@ -1,18 +1,21 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:videoplayer_miniproject/screens/mini_Screens/search.dart';
 import 'package:videoplayer_miniproject/screens/video/video_play.dart';
 import 'package:videoplayer_miniproject/functions/db_functions/db_functions.dart';
 import '../../Model/video_model/video_model.dart';
 import 'package:lottie/lottie.dart';
 import '../../model/favorite_model/favorite_model.dart';
+import 'package:video_thumbnail/video_thumbnail.dart' as video_thumbnail;
+import 'package:path/path.dart';
 
 class VideoList extends StatefulWidget {
   const VideoList({super.key});
-
   @override
   State<VideoList> createState() => _VideoListState();
 }
@@ -20,18 +23,22 @@ class VideoList extends StatefulWidget {
 class _VideoListState extends State<VideoList> {
   final TextEditingController _reNameController = TextEditingController();
 
-  // Maintain favorite videos list
+  // filepicker
   // Future<void> _pickVideo(BuildContext context) async {
-  //   FilePickerResult? result = await FilePicker.platform
-  //       .pickFiles(type: FileType.video, allowMultiple:true);
+  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
+  //     type: FileType.video,
+  //     allowMultiple: true,
+  //   );
 
   //   if (result != null && result.files.isNotEmpty) {
-  //     final String videoPath = result.files.first.path!;
-  //     final String videoName = videoPath.split('/').last;
-  //     final VideoModel videoModel =
-  //         VideoModel(name: videoName, videoPath: videoPath);
+  //     final videoBox = Hive.box<VideoModel>('videos');
+  //     final videosToAdd = result.files.map((file) {
+  //       final String videoPath = file.path!;
+  //       final String videoName = videoPath.split('/').last;
+  //       return VideoModel(name: videoName, videoPath: videoPath);
+  //     }).toList();
 
-  //     await Hive.box<VideoModel>('videos').add(videoModel);
+  //     await videoBox.addAll(videosToAdd);
   //   }
   // }
 
@@ -43,11 +50,29 @@ class _VideoListState extends State<VideoList> {
 
     if (result != null && result.files.isNotEmpty) {
       final videoBox = Hive.box<VideoModel>('videos');
-      final videosToAdd = result.files.map((file) {
+      final videosToAdd = await Future.wait(result.files.map((file) async {
         final String videoPath = file.path!;
         final String videoName = videoPath.split('/').last;
-        return VideoModel(name: videoName, videoPath: videoPath);
-      }).toList();
+
+        final Directory documentsDir = await getApplicationDocumentsDirectory();
+        final String thumbnailPath =
+            "${documentsDir.path}/thumbnails/${videoName}.jpg";
+
+        await Directory(dirname(thumbnailPath)).create(recursive: true);
+
+        await video_thumbnail.VideoThumbnail.thumbnailFile(
+          video: videoPath,
+          thumbnailPath: thumbnailPath,
+          imageFormat: video_thumbnail.ImageFormat.JPEG,
+          quality: 50,
+        );
+
+        return VideoModel(
+          name: videoName,
+          videoPath: videoPath,
+          thumbnailPath: thumbnailPath,
+        );
+      }));
 
       await videoBox.addAll(videosToAdd);
     }
@@ -84,7 +109,7 @@ class _VideoListState extends State<VideoList> {
         title: const Text('Video'),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 10, left: 5),
+        padding: const EdgeInsets.only(top: 9),
         child: ValueListenableBuilder(
           valueListenable: videoBox.listenable(),
           builder: (context, Box<VideoModel> box, _) {
@@ -196,10 +221,23 @@ class _VideoListState extends State<VideoList> {
                       ),
                     ]),
                     child: ListTile(
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 10.0),
                       leading: SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: Image.asset('assets/images/play.png'),
+                        height: double.infinity,
+                        width: 80,
+                        child: video.thumbnailPath != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.file(
+                                  File(
+                                    video.thumbnailPath!,
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : Image.asset(
+                                'assets/images/play.png'), // Default placeholder,
                       ),
                       //Favorite icon
                       trailing: IconButton(
@@ -241,7 +279,9 @@ class _VideoListState extends State<VideoList> {
                       ),
                       title: Text(
                         video.name,
-                        style: const TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 15),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2, // Show only one line
                       ),
                       onTap: () {
                         Navigator.push(

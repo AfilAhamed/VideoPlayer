@@ -17,6 +17,7 @@ class VideoModelAdapter extends TypeAdapter<VideoModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return VideoModel(
+      thumbnailPath: fields[2] as String?,
       videoPath: fields[1] as String,
       name: fields[0] as String,
     );
@@ -25,11 +26,13 @@ class VideoModelAdapter extends TypeAdapter<VideoModel> {
   @override
   void write(BinaryWriter writer, VideoModel obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.videoPath);
+      ..write(obj.videoPath)
+      ..writeByte(2)
+      ..write(obj.thumbnailPath);
   }
 
   @override

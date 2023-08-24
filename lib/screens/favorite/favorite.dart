@@ -71,13 +71,17 @@ class FavoriteVideoList extends StatelessWidget {
                     ]),
                     child: ListTile(
                       leading: SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: Image.asset('assets/images/play.png'),
+                        height: double.infinity,
+                        width: 55,
+                        child: Lottie.asset(
+                            fit: BoxFit.cover,
+                            'assets/images/favorite thumbnail.json'),
                       ),
                       title: Text(
                         favoriteVideo.favname,
-                        style: const TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 15),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2, // Show only one line
                       ),
                       onTap: () {
                         // Navigate to the video player

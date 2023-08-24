@@ -8,13 +8,15 @@ class VideoModel extends HiveObject {
   String name;
   @HiveField(1)
   final String videoPath;
+  @HiveField(2)
+  String? thumbnailPath;
 
   bool isFavorite = false;
 
   File? file;
 
-  VideoModel({
-    required this.videoPath,
-    required this.name,
-  });
+  VideoModel(
+      {required this.videoPath,
+      required this.name,
+      required this.thumbnailPath});
 }
