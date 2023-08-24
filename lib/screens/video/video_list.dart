@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:videoplayer_miniproject/screens/mini_Screens/search.dart';
@@ -7,7 +8,6 @@ import 'package:videoplayer_miniproject/screens/video/video_play.dart';
 import 'package:videoplayer_miniproject/functions/db_functions/db_functions.dart';
 import '../../Model/video_model/video_model.dart';
 import 'package:lottie/lottie.dart';
-import 'package:flutter/services.dart'; // Import HapticFeedback
 import '../../model/favorite_model/favorite_model.dart';
 
 class VideoList extends StatefulWidget {
@@ -21,18 +21,35 @@ class _VideoListState extends State<VideoList> {
   final TextEditingController _reNameController = TextEditingController();
 
   // Maintain favorite videos list
+  // Future<void> _pickVideo(BuildContext context) async {
+  //   FilePickerResult? result = await FilePicker.platform
+  //       .pickFiles(type: FileType.video, allowMultiple:true);
+
+  //   if (result != null && result.files.isNotEmpty) {
+  //     final String videoPath = result.files.first.path!;
+  //     final String videoName = videoPath.split('/').last;
+  //     final VideoModel videoModel =
+  //         VideoModel(name: videoName, videoPath: videoPath);
+
+  //     await Hive.box<VideoModel>('videos').add(videoModel);
+  //   }
+  // }
+
   Future<void> _pickVideo(BuildContext context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.video,
+      allowMultiple: true,
     );
 
     if (result != null && result.files.isNotEmpty) {
-      final String videoPath = result.files.first.path!;
-      final String videoName = videoPath.split('/').last;
-      final VideoModel videoModel =
-          VideoModel(name: videoName, videoPath: videoPath);
+      final videoBox = Hive.box<VideoModel>('videos');
+      final videosToAdd = result.files.map((file) {
+        final String videoPath = file.path!;
+        final String videoName = videoPath.split('/').last;
+        return VideoModel(name: videoName, videoPath: videoPath);
+      }).toList();
 
-      await Hive.box<VideoModel>('videos').add(videoModel);
+      await videoBox.addAll(videosToAdd);
     }
   }
 
@@ -208,7 +225,7 @@ class _VideoListState extends State<VideoList> {
                               favoriteVideoBox.add(favoriteVideo);
                             }
                             // Provide haptic feedback
-                            //HapticFeedback.heavyImpact();
+                            HapticFeedback.mediumImpact();
                           });
                         },
                         icon: Icon(

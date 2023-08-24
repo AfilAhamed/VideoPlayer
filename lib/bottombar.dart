@@ -15,7 +15,7 @@ class _BottomBarState extends State<BottomBar> {
   int indexnum = 0;
 
   final screens = [
-    VideoList(),
+    const VideoList(),
     const FavoriteVideoList(),
     const BarChartSample2(),
     const SettingsScreen(),
