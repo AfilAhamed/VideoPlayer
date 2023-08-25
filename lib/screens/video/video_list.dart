@@ -224,21 +224,17 @@ class _VideoListState extends State<VideoList> {
                       contentPadding:
                           const EdgeInsets.symmetric(horizontal: 10.0),
                       leading: SizedBox(
-                        height: double.infinity,
-                        width: 80,
-                        child: video.thumbnailPath != null
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.file(
-                                  File(
-                                    video.thumbnailPath!,
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : Image.asset(
-                                'assets/images/play.png'), // Default placeholder,
-                      ),
+                          height: double.infinity,
+                          width: 80,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.file(
+                              File(
+                                video.thumbnailPath!,
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                          )),
                       //Favorite icon
                       trailing: IconButton(
                         onPressed: () {
@@ -257,9 +253,9 @@ class _VideoListState extends State<VideoList> {
                               favoriteVideoBox.delete(favoriteVideo.key);
                             } else {
                               final favoriteVideo = FavoriteVideoModel(
-                                favname: video.name,
-                                favvideoPath: video.videoPath,
-                              );
+                                  favname: video.name,
+                                  favvideoPath: video.videoPath,
+                                  favThumbnailPath: video.thumbnailPath);
                               favoriteVideoBox.add(favoriteVideo);
                             }
                             // Provide haptic feedback

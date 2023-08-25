@@ -17,6 +17,7 @@ class FavoriteVideoModelAdapter extends TypeAdapter<FavoriteVideoModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return FavoriteVideoModel(
+      favThumbnailPath: fields[2] as String?,
       favvideoPath: fields[1] as String,
       favname: fields[0] as String,
     );
@@ -25,11 +26,13 @@ class FavoriteVideoModelAdapter extends TypeAdapter<FavoriteVideoModel> {
   @override
   void write(BinaryWriter writer, FavoriteVideoModel obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.favname)
       ..writeByte(1)
-      ..write(obj.favvideoPath);
+      ..write(obj.favvideoPath)
+      ..writeByte(2)
+      ..write(obj.favThumbnailPath);
   }
 
   @override

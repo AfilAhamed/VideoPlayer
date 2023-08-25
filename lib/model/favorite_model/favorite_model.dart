@@ -8,11 +8,13 @@ class FavoriteVideoModel extends HiveObject {
   final String favname;
   @HiveField(1)
   final String favvideoPath;
+  @HiveField(2)
+  String? favThumbnailPath;
 
   bool isFavorite = false;
 
-  FavoriteVideoModel({
-    required this.favvideoPath,
-    required this.favname,
-  });
+  FavoriteVideoModel(
+      {required this.favvideoPath,
+      required this.favname,
+      this.favThumbnailPath});
 }

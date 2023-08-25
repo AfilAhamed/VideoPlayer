@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -21,7 +23,7 @@ class FavoriteVideoList extends StatelessWidget {
         title: const Text('Favorite'),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 10, left: 5),
+        padding: const EdgeInsets.only(top: 9),
         child: ValueListenableBuilder(
           valueListenable: favoriteVideoBox.listenable(),
           builder: (context, Box<FavoriteVideoModel> box, _) {
@@ -70,18 +72,26 @@ class FavoriteVideoList extends StatelessWidget {
                       )
                     ]),
                     child: ListTile(
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 10.0),
                       leading: SizedBox(
                         height: double.infinity,
-                        width: 55,
-                        child: Lottie.asset(
+                        width: 80,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.file(
+                            File(
+                              favoriteVideo.favThumbnailPath!,
+                            ),
                             fit: BoxFit.cover,
-                            'assets/images/favorite thumbnail.json'),
+                          ),
+                        ),
                       ),
                       title: Text(
                         favoriteVideo.favname,
                         style: const TextStyle(fontSize: 15),
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 2, // Show only one line
+                        maxLines: 2,
                       ),
                       onTap: () {
                         // Navigate to the video player
