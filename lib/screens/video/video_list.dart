@@ -23,37 +23,17 @@ class VideoList extends StatefulWidget {
 class _VideoListState extends State<VideoList> {
   final TextEditingController _reNameController = TextEditingController();
 
-  // filepicker
-  // Future<void> _pickVideo(BuildContext context) async {
-  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
-  //     type: FileType.video,
-  //     allowMultiple: true,
-  //   );
-
-  //   if (result != null && result.files.isNotEmpty) {
-  //     final videoBox = Hive.box<VideoModel>('videos');
-  //     final videosToAdd = result.files.map((file) {
-  //       final String videoPath = file.path!;
-  //       final String videoName = videoPath.split('/').last;
-  //       return VideoModel(name: videoName, videoPath: videoPath);
-  //     }).toList();
-
-  //     await videoBox.addAll(videosToAdd);
-  //   }
-  // }
-
+  // filepicker function along with thumbnail
   Future<void> _pickVideo(BuildContext context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.video,
       allowMultiple: true,
     );
-
     if (result != null && result.files.isNotEmpty) {
       final videoBox = Hive.box<VideoModel>('videos');
       final videosToAdd = await Future.wait(result.files.map((file) async {
         final String videoPath = file.path!;
         final String videoName = videoPath.split('/').last;
-
         final Directory documentsDir = await getApplicationDocumentsDirectory();
         final String thumbnailPath =
             "${documentsDir.path}/thumbnails/${videoName}.jpg";
@@ -149,8 +129,8 @@ class _VideoListState extends State<VideoList> {
                       SlidableAction(
                         spacing: 5,
                         onPressed: (context) {
-                          //to show current name
-                          _reNameController.text = video.name;
+                          _reNameController.text =
+                              video.name; //to show current name when update
                           showDialog(
                             context: context,
                             builder: (context) {
@@ -187,7 +167,7 @@ class _VideoListState extends State<VideoList> {
                                   ),
                                   TextButton(
                                     onPressed: () async {
-                                      // update code here
+                                      // update function
                                       final updatedName =
                                           _reNameController.text;
                                       video.name = updatedName;
@@ -212,8 +192,7 @@ class _VideoListState extends State<VideoList> {
                       SlidableAction(
                         spacing: 5,
                         onPressed: (context) {
-                          //delete
-                          deleteFromDB(context, index);
+                          deleteFromDB(context, index); //delete from hive
                         },
                         icon: Icons.delete,
                         backgroundColor: Colors.red,
@@ -235,7 +214,6 @@ class _VideoListState extends State<VideoList> {
                               fit: BoxFit.cover,
                             ),
                           )),
-                      //Favorite icon
                       trailing: IconButton(
                         onPressed: () {
                           setState(() {
@@ -258,8 +236,9 @@ class _VideoListState extends State<VideoList> {
                                   favThumbnailPath: video.thumbnailPath);
                               favoriteVideoBox.add(favoriteVideo);
                             }
-                            // Provide haptic feedback
-                            HapticFeedback.mediumImpact();
+
+                            HapticFeedback
+                                .mediumImpact(); // Provide haptic feedback
                           });
                         },
                         icon: Icon(
@@ -295,7 +274,7 @@ class _VideoListState extends State<VideoList> {
           },
         ),
       ),
-      // to add videos
+      //add button to add videos
       floatingActionButton: FloatingActionButton(
         onPressed: () => _pickVideo(context),
         backgroundColor: Colors.black,

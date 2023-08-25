@@ -28,7 +28,6 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         _controller.play();
         setState(() {});
       });
-
     _controlsTimer = Timer.periodic(const Duration(seconds: 5), (_) {
       setState(() {
         _controlsVisible = false;
