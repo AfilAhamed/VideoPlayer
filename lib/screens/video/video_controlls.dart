@@ -131,10 +131,16 @@ class _VideoControlsState extends State<VideoControls> {
                     ),
                     IconButton(
                       onPressed: () {
-                        //previous video
+                        if (widget._controller.value.position -
+                                const Duration(seconds: 10) >
+                            Duration.zero) {
+                          widget._controller.seekTo(
+                              widget._controller.value.position -
+                                  const Duration(seconds: 10));
+                        }
                       },
                       icon: const Icon(
-                        Icons.skip_previous_rounded,
+                        Icons.replay_10,
                         color: Colors.white,
                       ),
                     ),
@@ -157,10 +163,16 @@ class _VideoControlsState extends State<VideoControls> {
                     ),
                     IconButton(
                       onPressed: () {
-                        //next video
+                        if (widget._controller.value.position +
+                                const Duration(seconds: 10) <
+                            widget._controller.value.duration) {
+                          widget._controller.seekTo(
+                              widget._controller.value.position +
+                                  const Duration(seconds: 10));
+                        }
                       },
                       icon: const Icon(
-                        Icons.skip_next_rounded,
+                        Icons.forward_10,
                         color: Colors.white,
                       ),
                     ),

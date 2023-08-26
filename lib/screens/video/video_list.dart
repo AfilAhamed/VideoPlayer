@@ -12,6 +12,7 @@ import '../../Model/video_model/video_model.dart';
 import 'package:lottie/lottie.dart';
 import '../../model/favorite_model/favorite_model.dart';
 import 'package:video_thumbnail/video_thumbnail.dart' as video_thumbnail;
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 
 class VideoList extends StatefulWidget {
@@ -22,6 +23,7 @@ class VideoList extends StatefulWidget {
 
 class _VideoListState extends State<VideoList> {
   final TextEditingController _reNameController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // filepicker function along with thumbnail
   Future<void> _pickVideo(BuildContext context) async {
@@ -55,6 +57,30 @@ class _VideoListState extends State<VideoList> {
       }));
 
       await videoBox.addAll(videosToAdd);
+
+      // Show a success snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          padding: EdgeInsets.only(bottom: 10, top: 10, left: 10, right: 10),
+          content: Center(
+              child: Text(
+            'Video added successfully',
+          )),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 1),
+        ),
+      );
+    } else {
+      // Show an error snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          padding: EdgeInsets.only(bottom: 10, top: 10, left: 10, right: 10),
+          content:
+              Center(child: Text('Video didn\'t get added. Please try again.')),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
   }
 
@@ -140,19 +166,37 @@ class _VideoListState extends State<VideoList> {
                                   'Enter new name for ${video.name}',
                                   style: const TextStyle(color: Colors.white),
                                 ),
-                                content: TextFormField(
-                                  style: const TextStyle(color: Colors.black),
-                                  controller: _reNameController,
-                                  decoration: const InputDecoration(
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.orange, width: 3)),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.orange, width: 3)),
-                                    hintText: 'New Video Name',
+                                content: Form(
+                                  key: _formKey,
+                                  child: TextFormField(
+                                    style: const TextStyle(color: Colors.black),
+                                    controller: _reNameController,
+                                    decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        focusedBorder: const OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.orange,
+                                                width: 3)),
+                                        enabledBorder: const OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.orange,
+                                                width: 3)),
+                                        hintText: 'New Video Name',
+                                        suffixIcon: IconButton(
+                                            onPressed: () {
+                                              _reNameController.clear();
+                                            },
+                                            icon: const Icon(
+                                              Icons.clear,
+                                              color: Colors.orange,
+                                            ))),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter a valid video name';
+                                      }
+                                      return null;
+                                    },
                                   ),
                                 ),
                                 actions: [
@@ -167,13 +211,29 @@ class _VideoListState extends State<VideoList> {
                                   ),
                                   TextButton(
                                     onPressed: () async {
-                                      // update function
-                                      final updatedName =
-                                          _reNameController.text;
-                                      video.name = updatedName;
-                                      await videoBox.putAt(index, video);
+                                      if (_formKey.currentState!.validate()) {
+                                        // update function
+                                        final updatedName =
+                                            _reNameController.text;
+                                        final oldName = video.name;
+                                        video.name = updatedName;
+                                        await videoBox.putAt(index, video);
+                                        Navigator.pop(context);
 
-                                      Navigator.pop(context);
+                                        // Show a snackbar for the successful update
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Center(
+                                              child: Text(
+                                                  'Video name updated from "$oldName" to "$updatedName"'),
+                                            ),
+                                            duration:
+                                                const Duration(seconds: 3),
+                                            backgroundColor: Colors.blue,
+                                          ),
+                                        );
+                                      }
                                     },
                                     child: const Text(
                                       'Rename',
