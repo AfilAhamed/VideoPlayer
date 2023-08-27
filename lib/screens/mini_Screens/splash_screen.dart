@@ -26,19 +26,18 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.black,
         body: Container(
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/images/video playe logo 1.png'),
+              Image.asset(
+                'assets/images/infinity-player-logo (4).png',
+              ),
               const SizedBox(
                 height: 10,
               ),
-              const Text(
-                'Video Player',
-                style: TextStyle(fontSize: 27, fontWeight: FontWeight.w700),
-              )
             ],
           ),
         ),
