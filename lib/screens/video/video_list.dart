@@ -229,7 +229,7 @@ class _VideoListState extends State<VideoList> {
                                                   'Video name updated from "$oldName" to "$updatedName"'),
                                             ),
                                             duration:
-                                                const Duration(seconds: 3),
+                                                const Duration(seconds: 2),
                                             backgroundColor: Colors.blue,
                                           ),
                                         );

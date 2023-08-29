@@ -131,13 +131,25 @@ class _VideoControlsState extends State<VideoControls> {
                     ),
                     IconButton(
                       onPressed: () {
-                        if (widget._controller.value.position -
-                                const Duration(seconds: 10) >
-                            Duration.zero) {
-                          widget._controller.seekTo(
-                              widget._controller.value.position -
-                                  const Duration(seconds: 10));
+                        Duration newPosition =
+                            widget._controller.value.position -
+                                const Duration(seconds: 10);
+
+                        if (newPosition < Duration.zero) {
+                          newPosition =
+                              Duration.zero; // Set to start of the video
                         }
+
+                        widget._controller.seekTo(newPosition);
+
+                        //--------------------
+                        // if (widget._controller.value.position -
+                        //         const Duration(seconds: 10) >
+                        //     Duration.zero) {
+                        //   widget._controller.seekTo(
+                        //       widget._controller.value.position -
+                        //           const Duration(seconds: 10));
+                        // }
                       },
                       icon: const Icon(
                         Icons.replay_10,
@@ -163,13 +175,28 @@ class _VideoControlsState extends State<VideoControls> {
                     ),
                     IconButton(
                       onPressed: () {
-                        if (widget._controller.value.position +
-                                const Duration(seconds: 10) <
-                            widget._controller.value.duration) {
-                          widget._controller.seekTo(
-                              widget._controller.value.position +
-                                  const Duration(seconds: 10));
+                        Duration newPosition =
+                            widget._controller.value.position +
+                                const Duration(seconds: 10);
+                        Duration videoDuration =
+                            widget._controller.value.duration;
+
+                        if (newPosition > videoDuration) {
+                          newPosition =
+                              videoDuration; // Set to end of the video
                         }
+
+                        widget._controller.seekTo(newPosition);
+
+                        //-------------------
+                        // if (
+                        //   widget._controller.value.position +
+                        //         const Duration(seconds: 10) <
+                        //     widget._controller.value.duration) {
+                        //   widget._controller.seekTo(
+                        //       widget._controller.value.position +
+                        //           const Duration(seconds: 10));
+                        // }
                       },
                       icon: const Icon(
                         Icons.forward_10,

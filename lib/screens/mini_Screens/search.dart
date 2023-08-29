@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../../Model/video_model/video_model.dart';
@@ -73,8 +75,22 @@ class VideoSearchScreenState extends State<VideoSearchScreen> {
                 final video = _searchResults[index];
                 return Card(
                   child: ListTile(
-                    leading: const Icon(Icons.search),
-                    horizontalTitleGap: 0,
+                    leading: Padding(
+                      padding: const EdgeInsets.only(bottom: 2, top: 2),
+                      child: SizedBox(
+                          height: double.infinity,
+                          width: 80,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.file(
+                              File(
+                                video.thumbnailPath!,
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                          )),
+                    ),
+                    horizontalTitleGap: 10,
                     title: Text(video.name),
                     onTap: () {
                       Navigator.push(
