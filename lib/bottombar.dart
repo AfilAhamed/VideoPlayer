@@ -18,7 +18,7 @@ class _BottomBarState extends State<BottomBar> {
     const VideoList(),
     const FavoriteVideoList(),
     // const BarChartSample2(),
-    StatisticsPage(),
+    const StatisticsPage(),
     const SettingsScreen(),
   ];
 
