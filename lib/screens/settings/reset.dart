@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:videoplayer_miniproject/model/chart_model/chart_model.dart';
 import '../../Model/video_model/video_model.dart';
 import '../../model/favorite_model/favorite_model.dart';
 import '../mini_Screens/splash_screen.dart';
@@ -52,6 +53,9 @@ Future<void> resetDB(
     videoDb.clear();
     final favoriteDb = await Hive.openBox<FavoriteVideoModel>('Favorite');
     favoriteDb.clear();
+    final chartDB = await Hive.openBox<VideoStatistics>('statistics');
+    chartDB.clear();
+
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(

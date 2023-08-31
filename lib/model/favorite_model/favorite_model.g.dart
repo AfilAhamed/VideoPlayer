@@ -17,9 +17,9 @@ class FavoriteVideoModelAdapter extends TypeAdapter<FavoriteVideoModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return FavoriteVideoModel(
-      favThumbnailPath: fields[2] as String?,
       favvideoPath: fields[1] as String,
       favname: fields[0] as String,
+      favThumbnailPath: fields[2] as String?,
     );
   }
 

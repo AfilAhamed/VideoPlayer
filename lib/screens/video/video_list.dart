@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:videoplayer_miniproject/model/chart_model/chart_model.dart';
 import 'package:videoplayer_miniproject/screens/mini_Screens/search.dart';
 import 'package:videoplayer_miniproject/screens/video/video_play.dart';
 import 'package:videoplayer_miniproject/functions/db_functions/db_functions.dart';
@@ -70,6 +71,28 @@ class _VideoListState extends State<VideoList> {
           duration: Duration(seconds: 1),
         ),
       );
+
+      //-------------
+
+      final now = DateTime.now();
+      //final formattedDate = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+      final statisticsBox = Hive.box<VideoStatistics>('statistics');
+      // final today = DateTime.now();
+      final periods =
+          "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+
+      final existingStatistics = statisticsBox.get(periods);
+      if (existingStatistics != null) {
+        existingStatistics.addedCount += videosToAdd.length;
+        statisticsBox.put(periods, existingStatistics);
+      } else {
+        final statistics = VideoStatistics(
+          period: periods,
+          addedCount: videosToAdd.length,
+          deletedCount: 0,
+        );
+        statisticsBox.put(periods, statistics);
+      }
     } else {
       // Show an error snackbar
       ScaffoldMessenger.of(context).showSnackBar(

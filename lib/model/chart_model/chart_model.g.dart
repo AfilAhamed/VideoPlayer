@@ -1,38 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'video_model.dart';
+part of 'chart_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class VideoModelAdapter extends TypeAdapter<VideoModel> {
+class VideoStatisticsAdapter extends TypeAdapter<VideoStatistics> {
   @override
-  final int typeId = 0;
+  final int typeId = 2;
 
   @override
-  VideoModel read(BinaryReader reader) {
+  VideoStatistics read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return VideoModel(
-      videoPath: fields[1] as String,
-      name: fields[0] as String,
-      thumbnailPath: fields[2] as String?,
+    return VideoStatistics(
+      period: fields[0] as String,
+      addedCount: fields[1] as int,
+      deletedCount: fields[2] as int,
     );
   }
 
   @override
-  void write(BinaryWriter writer, VideoModel obj) {
+  void write(BinaryWriter writer, VideoStatistics obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.name)
+      ..write(obj.period)
       ..writeByte(1)
-      ..write(obj.videoPath)
+      ..write(obj.addedCount)
       ..writeByte(2)
-      ..write(obj.thumbnailPath);
+      ..write(obj.deletedCount);
   }
 
   @override
@@ -41,7 +41,7 @@ class VideoModelAdapter extends TypeAdapter<VideoModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is VideoModelAdapter &&
+      other is VideoStatisticsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

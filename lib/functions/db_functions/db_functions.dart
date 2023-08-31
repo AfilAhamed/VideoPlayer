@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:videoplayer_miniproject/model/chart_model/chart_model.dart';
 import '../../Model/video_model/video_model.dart';
 
 //delete from db with a confirmation show dailog..
@@ -47,5 +48,23 @@ Future<void> deleteFromDB(BuildContext context, int id) async {
 
   if (confirmDelete == true) {
     await videoDB.deleteAt(id);
+  }
+
+  final statisticsBox = Hive.box<VideoStatistics>('statistics');
+  final now = DateTime.now();
+  final period =
+      "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+
+  final existingStatistics = statisticsBox.get(period);
+  if (existingStatistics != null) {
+    existingStatistics.deletedCount += 1;
+    statisticsBox.put(period, existingStatistics);
+  } else {
+    final statistics = VideoStatistics(
+      period: period,
+      addedCount: 0,
+      deletedCount: 1,
+    );
+    statisticsBox.put(period, statistics);
   }
 }
