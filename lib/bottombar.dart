@@ -43,7 +43,7 @@ class _BottomBarState extends State<BottomBar> {
               BottomNavigationBarItem(
                   icon: Icon(Icons.favorite), label: 'Favorite'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.bar_chart_outlined), label: 'Charts'),
+                  icon: Icon(Icons.bar_chart_outlined), label: 'Chart'),
               BottomNavigationBarItem(
                   icon: Icon(Icons.settings), label: 'Settings')
             ],
