@@ -39,7 +39,7 @@ class _VideoListState extends State<VideoList> {
         final String videoName = videoPath.split('/').last;
         final Directory documentsDir = await getApplicationDocumentsDirectory();
         final String thumbnailPath =
-            "${documentsDir.path}/thumbnails/${videoName}.jpg";
+            "${documentsDir.path}/thumbnails/$videoName.jpg";
 
         await Directory(dirname(thumbnailPath)).create(recursive: true);
 
@@ -59,25 +59,27 @@ class _VideoListState extends State<VideoList> {
 
       await videoBox.addAll(videosToAdd);
 
-      // Show a success snackbar
+      // Show a success snackbar if video geted
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          padding: EdgeInsets.only(bottom: 10, top: 10, left: 10, right: 10),
+        SnackBar(
+          padding:
+              const EdgeInsets.only(bottom: 10, top: 10, left: 10, right: 10),
           content: Center(
               child: Text(
             'Video added successfully',
+            style: TextStyle(
+                color: Colors.orange.shade700, fontWeight: FontWeight.bold),
           )),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 1),
+          backgroundColor: Colors.black,
+          duration: const Duration(seconds: 1),
         ),
       );
 
       //-------------
-
+      // chart calculation of video added
       final now = DateTime.now();
-      //final formattedDate = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
       final statisticsBox = Hive.box<VideoStatistics>('statistics');
-      // final today = DateTime.now();
+
       final periods =
           "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
 
@@ -94,7 +96,7 @@ class _VideoListState extends State<VideoList> {
         statisticsBox.put(periods, statistics);
       }
     } else {
-      // Show an error snackbar
+      // Show an error snackbar if video didnt get
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           padding: EdgeInsets.only(bottom: 10, top: 10, left: 10, right: 10),
@@ -339,7 +341,7 @@ class _VideoListState extends State<VideoList> {
                         video.name,
                         style: const TextStyle(fontSize: 15),
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 2, // Show only one line
+                        maxLines: 2,
                       ),
                       onTap: () {
                         Navigator.push(

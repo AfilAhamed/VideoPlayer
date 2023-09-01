@@ -329,10 +329,10 @@ class StatisticsPage extends StatefulWidget {
   const StatisticsPage({super.key});
 
   @override
-  _StatisticsPageState createState() => _StatisticsPageState();
+  StatisticsPageState createState() => StatisticsPageState();
 }
 
-class _StatisticsPageState extends State<StatisticsPage> {
+class StatisticsPageState extends State<StatisticsPage> {
   String selectedPeriod = 'Day'; // Default selection
 
   @override
@@ -386,8 +386,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
         ],
       ),
       body: Center(
-        child: Container(
-            decoration: BoxDecoration(), child: StatisticsChart(filteredData)),
+        child: StatisticsChart(filteredData),
       ),
     );
   }
@@ -419,7 +418,20 @@ class StatisticsChart extends StatelessWidget {
       ],
       animate: true,
       barGroupingType: charts.BarGroupingType.grouped,
-      behaviors: [charts.SeriesLegend()],
+      behaviors: [
+        charts.SeriesLegend(
+          position: charts.BehaviorPosition.top, // Legend at the top
+          desiredMaxRows: 2, // Limit to 2 rows for better alignment
+        ),
+        // charts.ChartTitle(
+        //   'Count', // Y-axis title
+        //   behaviorPosition: charts.BehaviorPosition.start,
+        // ),
+        // charts.ChartTitle(
+        //   'Period', // X-axis title
+        //   behaviorPosition: charts.BehaviorPosition.bottom,
+        // ),
+      ],
     );
   }
 }
