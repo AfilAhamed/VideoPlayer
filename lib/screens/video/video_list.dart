@@ -109,261 +109,440 @@ class _VideoListState extends State<VideoList> {
     }
   }
 
+  Set<int> selectedVideos = Set<int>();
+  bool _isSelecting = false;
+
+  // Function to handle deleting selected videos and multiple
+  void _deleteSelectedVideos() {
+    final videoBox = Hive.box<VideoModel>('videos');
+    final List<int> selectedIndices = selectedVideos.toList();
+    selectedIndices.sort((a, b) =>
+        b.compareTo(a)); // Sort in reverse order to avoid index issues
+    for (int index in selectedIndices) {
+      final video = videoBox.getAt(index);
+      if (video != null) {
+        videoBox.deleteAt(index);
+      }
+    }
+    setState(() {
+      _isSelecting = false;
+      selectedVideos.clear();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final videoBox = Hive.box<VideoModel>('videos');
     final favoriteVideoBox = Hive.box<FavoriteVideoModel>('Favorite');
+    final multipledelete = videoBox.values.toList();
+    return GestureDetector(
+      onTap: () {
+        //to disable the selction to delete multipl videos
+        if (_isSelecting) {
+          setState(() {
+            _isSelecting = false;
+            selectedVideos.clear();
+          });
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: _isSelecting
+            ? AppBar(
+                backgroundColor: Colors.black,
+                title: Text('${selectedVideos.length} selected'),
+                actions: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.select_all),
+                    onPressed: () {
+                      setState(() {
+                        if (selectedVideos.length == multipledelete.length) {
+                          selectedVideos.clear();
+                        } else {
+                          selectedVideos = Set<int>.from(List<int>.generate(
+                              multipledelete.length, (i) => i));
+                        }
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: selectedVideos.isNotEmpty
+                        ? () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text('Delete Selected Videos'),
+                                  content: Text(
+                                    'Are you sure you want to delete the selected videos?',
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text('Cancel'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Text('Delete'),
+                                      onPressed: () {
+                                        _deleteSelectedVideos();
+                                        Navigator.of(context).pop();
+                                        final statisticsBox =
+                                            Hive.box<VideoStatistics>(
+                                                'statistics');
+                                        final now = DateTime.now();
+                                        final period =
+                                            "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.black,
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const VideoSearchScreen(),
-                    ));
-              },
-              icon: Icon(
-                Icons.search_outlined,
-                color: Colors.orange.shade700,
-                size: 30,
-              )),
-          const SizedBox(
-            width: 10,
-          ),
-        ],
-        title: const Text('Video'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 9),
-        child: ValueListenableBuilder(
-          valueListenable: videoBox.listenable(),
-          builder: (context, Box<VideoModel> box, _) {
-            final videos = box.values.toList();
-            //lottie based on condition
-            if (videos.isEmpty) {
-              return Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Lottie.asset('assets/images/data.json',
-                      fit: BoxFit.cover, height: 300),
-                  const Text(
-                    'Video is Empty',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 23,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
-                  )
+                                        final existingStatistics =
+                                            statisticsBox.get(period);
+                                        if (existingStatistics != null) {
+                                          existingStatistics.deletedCount += 1;
+                                          statisticsBox.put(
+                                              period, existingStatistics);
+                                        } else {
+                                          final statistics = VideoStatistics(
+                                            period: period,
+                                            addedCount: 0,
+                                            deletedCount: 1,
+                                          );
+                                          statisticsBox.put(period, statistics);
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        : null,
+                  ),
                 ],
-              ));
-            } else {
-              return ListView.separated(
-                itemCount: videos.length,
-                separatorBuilder: (context, index) {
-                  return const Divider(
-                    thickness: 1,
-                  );
-                },
-                itemBuilder: (context, index) {
-                  final video = videos[index];
-                  return Slidable(
-                    endActionPane:
-                        ActionPane(motion: const DrawerMotion(), children: [
-                      SlidableAction(
-                        spacing: 5,
-                        onPressed: (context) {
-                          _reNameController.text =
-                              video.name; //to show current name when update
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                backgroundColor: Colors.black,
-                                title: Text(
-                                  'Enter new name for ${video.name}',
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                                content: Form(
-                                  key: _formKey,
-                                  child: TextFormField(
-                                    style: const TextStyle(color: Colors.black),
-                                    controller: _reNameController,
-                                    decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        focusedBorder: const OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.orange,
-                                                width: 3)),
-                                        enabledBorder: const OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.orange,
-                                                width: 3)),
-                                        hintText: 'New Video Name',
-                                        suffixIcon: IconButton(
-                                            onPressed: () {
-                                              _reNameController.clear();
-                                            },
-                                            icon: const Icon(
-                                              Icons.clear,
-                                              color: Colors.orange,
-                                            ))),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter a valid video name';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text(
-                                      'Cancel',
-                                      style: TextStyle(color: Colors.orange),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () async {
-                                      if (_formKey.currentState!.validate()) {
-                                        // update function
-                                        final updatedName =
-                                            _reNameController.text;
-                                        final oldName = video.name;
-                                        video.name = updatedName;
-                                        await videoBox.putAt(index, video);
-                                        Navigator.pop(context);
+              )
+            : AppBar(
+                automaticallyImplyLeading: false,
+                backgroundColor: Colors.black,
+                actions: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const VideoSearchScreen(),
+                            ));
+                      },
+                      icon: Icon(
+                        Icons.search_outlined,
+                        color: Colors.orange.shade700,
+                        size: 30,
+                      )),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                ],
+                title: const Text('Video'),
+              ),
 
-                                        // Show a snackbar for the successful update
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Center(
-                                              child: Text(
-                                                  'Video name updated from "$oldName" to "$updatedName"'),
-                                            ),
-                                            duration:
-                                                const Duration(seconds: 2),
-                                            backgroundColor: Colors.blue,
-                                          ),
-                                        );
-                                      }
-                                    },
-                                    child: const Text(
-                                      'Rename',
-                                      style: TextStyle(color: Colors.orange),
+        body: Padding(
+          padding: const EdgeInsets.only(top: 9),
+          child: ValueListenableBuilder(
+            valueListenable: videoBox.listenable(),
+            builder: (context, Box<VideoModel> box, _) {
+              final videos = box.values.toList();
+              //lottie based on condition
+              if (videos.isEmpty) {
+                return Center(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Lottie.asset('assets/images/data.json',
+                        fit: BoxFit.cover, height: 300),
+                    const Text(
+                      'Video is Empty',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 23,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic),
+                    )
+                  ],
+                ));
+              } else {
+                return ListView.separated(
+                  itemCount: videos.length,
+                  separatorBuilder: (context, index) {
+                    return const Divider(
+                      thickness: 1,
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    final video = videos[index];
+                    final isSelected = selectedVideos.contains(index);
+                    return GestureDetector(
+                      onTap: () {
+                        if (_isSelecting) {
+                          setState(() {
+                            if (isSelected) {
+                              selectedVideos.remove(index);
+                            } else {
+                              selectedVideos.add(index);
+                            }
+                          });
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => VideoPlayerWidget(video),
+                            ),
+                          );
+                        }
+                      },
+                      onLongPress: () {
+                        setState(() {
+                          _isSelecting = true;
+                          if (isSelected) {
+                            selectedVideos.remove(index);
+                          } else {
+                            selectedVideos.add(index);
+                          }
+                        });
+                      },
+                      child: Slidable(
+                        endActionPane:
+                            ActionPane(motion: const DrawerMotion(), children: [
+                          SlidableAction(
+                            spacing: 5,
+                            onPressed: (context) {
+                              _reNameController.text =
+                                  video.name; //to show current name when update
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.black,
+                                    title: Text(
+                                      'Enter new name for ${video.name}',
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
-                                  ),
-                                ],
+                                    content: Form(
+                                      key: _formKey,
+                                      child: TextFormField(
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                        controller: _reNameController,
+                                        decoration: InputDecoration(
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                            focusedBorder:
+                                                const OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: Colors.orange,
+                                                        width: 3)),
+                                            enabledBorder:
+                                                const OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: Colors.orange,
+                                                        width: 3)),
+                                            hintText: 'New Video Name',
+                                            suffixIcon: IconButton(
+                                                onPressed: () {
+                                                  _reNameController.clear();
+                                                },
+                                                icon: const Icon(
+                                                  Icons.clear,
+                                                  color: Colors.orange,
+                                                ))),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter a valid video name';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text(
+                                          'Cancel',
+                                          style:
+                                              TextStyle(color: Colors.orange),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () async {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            // update function
+                                            final updatedName =
+                                                _reNameController.text;
+                                            final oldName = video.name;
+                                            video.name = updatedName;
+                                            await videoBox.putAt(index, video);
+                                            Navigator.pop(context);
+
+                                            // Show a snackbar for the successful update
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Center(
+                                                  child: Text(
+                                                      'Video name updated from "$oldName" to "$updatedName"'),
+                                                ),
+                                                duration:
+                                                    const Duration(seconds: 2),
+                                                backgroundColor: Colors.blue,
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        child: const Text(
+                                          'Rename',
+                                          style:
+                                              TextStyle(color: Colors.orange),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
-                        icon: Icons.edit,
-                        backgroundColor: Colors.blue,
-                        label: 'Edit',
-                      ),
-                      SlidableAction(
-                        spacing: 5,
-                        onPressed: (context) {
-                          deleteFromDB(context, index); //delete from hive
-                        },
-                        icon: Icons.delete,
-                        backgroundColor: Colors.red,
-                        label: 'Delete',
-                      ),
-                    ]),
-                    child: ListTile(
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 10.0),
-                      leading: SizedBox(
-                          height: double.infinity,
-                          width: 80,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.file(
-                              File(
-                                video.thumbnailPath!,
+                            icon: Icons.edit,
+                            backgroundColor: Colors.blue,
+                            label: 'Edit',
+                          ),
+                          SlidableAction(
+                            spacing: 5,
+                            onPressed: (context) {
+                              deleteFromDB(context, index); //delete from hive
+                            },
+                            icon: Icons.delete,
+                            backgroundColor: Colors.red,
+                            label: 'Delete',
+                          ),
+                        ]),
+                        child: ListTile(
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 10.0),
+                          leading: Stack(
+                            alignment: Alignment.topRight,
+                            children: [
+                              SizedBox(
+                                height: double.infinity,
+                                width: 80,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.file(
+                                    File(video.thumbnailPath!),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
-                              fit: BoxFit.cover,
-                            ),
-                          )),
-                      trailing: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            final isFavorite = favoriteVideoBox.values.any(
-                              (favoriteVideo) =>
-                                  favoriteVideo.favvideoPath == video.videoPath,
-                            );
-                            if (isFavorite) {
-                              final favoriteVideo =
-                                  favoriteVideoBox.values.firstWhere(
+                              if (isSelected)
+                                Container(
+                                  width: 24,
+                                  height: 24,
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue.withOpacity(0.7),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Center(
+                                    child: Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          //  SizedBox(
+                          //     height: double.infinity,
+                          //     width: 80,
+                          //     child: ClipRRect(
+                          //       borderRadius: BorderRadius.circular(8),
+                          //       child: Image.file(
+                          //         File(
+                          //           video.thumbnailPath!,
+                          //         ),
+                          //         fit: BoxFit.cover,
+                          //       ),
+                          //     )),
+                          trailing: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                final isFavorite = favoriteVideoBox.values.any(
+                                  (favoriteVideo) =>
+                                      favoriteVideo.favvideoPath ==
+                                      video.videoPath,
+                                );
+                                if (isFavorite) {
+                                  final favoriteVideo =
+                                      favoriteVideoBox.values.firstWhere(
+                                    (favoriteVideo) =>
+                                        favoriteVideo.favvideoPath ==
+                                        video.videoPath,
+                                  );
+                                  favoriteVideoBox.delete(favoriteVideo.key);
+                                } else {
+                                  final favoriteVideo = FavoriteVideoModel(
+                                      favname: video.name,
+                                      favvideoPath: video.videoPath,
+                                      favThumbnailPath: video.thumbnailPath);
+                                  favoriteVideoBox.add(favoriteVideo);
+                                }
+
+                                HapticFeedback
+                                    .mediumImpact(); // Provide haptic feedback
+                              });
+                            },
+                            icon: Icon(
+                              favoriteVideoBox.values.any(
                                 (favoriteVideo) =>
                                     favoriteVideo.favvideoPath ==
                                     video.videoPath,
-                              );
-                              favoriteVideoBox.delete(favoriteVideo.key);
-                            } else {
-                              final favoriteVideo = FavoriteVideoModel(
-                                  favname: video.name,
-                                  favvideoPath: video.videoPath,
-                                  favThumbnailPath: video.thumbnailPath);
-                              favoriteVideoBox.add(favoriteVideo);
-                            }
-
-                            HapticFeedback
-                                .mediumImpact(); // Provide haptic feedback
-                          });
-                        },
-                        icon: Icon(
-                          favoriteVideoBox.values.any(
-                            (favoriteVideo) =>
-                                favoriteVideo.favvideoPath == video.videoPath,
-                          )
-                              ? Icons.favorite
-                              : Icons.favorite_border_outlined,
-                          color: Colors.red,
-                          size: 30,
+                              )
+                                  ? Icons.favorite
+                                  : Icons.favorite_border_outlined,
+                              color: Colors.red,
+                              size: 30,
+                            ),
+                          ),
+                          title: Text(
+                            video.name,
+                            style: const TextStyle(fontSize: 15),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          ),
+                          // onTap: () {
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) => VideoPlayerWidget(video),
+                          //     ),
+                          //   );
+                          // },
                         ),
                       ),
-                      title: Text(
-                        video.name,
-                        style: const TextStyle(fontSize: 15),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => VideoPlayerWidget(video),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
-              );
-            }
-          },
+                    );
+                  },
+                );
+              }
+            },
+          ),
         ),
-      ),
-      //add button to add videos
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _pickVideo(context),
-        backgroundColor: Colors.black,
-        child: const Icon(Icons.add),
+        //add button to add videos
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => _pickVideo(context),
+          backgroundColor: Colors.black,
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
