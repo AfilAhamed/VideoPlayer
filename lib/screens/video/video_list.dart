@@ -135,143 +135,165 @@ class _VideoListState extends State<VideoList> {
     final videoBox = Hive.box<VideoModel>('videos');
     final favoriteVideoBox = Hive.box<FavoriteVideoModel>('Favorite');
     final multipledelete = videoBox.values.toList();
-    return GestureDetector(
-      onTap: () {
-        //to disable the selction to delete multipl videos
-        if (_isSelecting) {
-          setState(() {
-            _isSelecting = false;
-            selectedVideos.clear();
-          });
-        }
-      },
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: _isSelecting
-            ? AppBar(
-                backgroundColor: Colors.black,
-                title: Text('${selectedVideos.length} selected'),
-                actions: <Widget>[
-                  IconButton(
-                    icon: const Icon(Icons.select_all),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: _isSelecting
+          ? AppBar(
+              backgroundColor: Colors.black,
+              title: Text('${selectedVideos.length} selected'),
+              actions: <Widget>[
+                IconButton(
                     onPressed: () {
-                      setState(() {
-                        if (selectedVideos.length == multipledelete.length) {
+                      if (_isSelecting) {
+                        setState(() {
+                          _isSelecting = false;
                           selectedVideos.clear();
-                        } else {
-                          selectedVideos = Set<int>.from(List<int>.generate(
-                              multipledelete.length, (i) => i));
-                        }
-                      });
+                        });
+                      }
                     },
+                    icon: const Icon(Icons.clear_rounded)),
+                IconButton(
+                  icon: const Icon(Icons.select_all),
+                  onPressed: () {
+                    setState(() {
+                      if (selectedVideos.length == multipledelete.length) {
+                        selectedVideos.clear();
+                      } else {
+                        selectedVideos = Set<int>.from(List<int>.generate(
+                            multipledelete.length, (i) => i));
+                      }
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.delete,
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: selectedVideos.isNotEmpty
-                        ? () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: const Text('Delete Selected Videos'),
-                                  content: const Text(
-                                    'Are you sure you want to delete the selected videos?',
+                  onPressed: selectedVideos.isNotEmpty
+                      ? () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                backgroundColor: Colors.black,
+                                title: const Text(
+                                  'Delete Selected Videos',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                content: const Text(
+                                  'Are you sure you want to delete the selected videos?',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text(
+                                      'Cancel',
+                                      style: TextStyle(
+                                          color: Colors.orange.shade700),
+                                    ),
+                                    onPressed: () {
+                                      if (_isSelecting) {
+                                        setState(() {
+                                          _isSelecting = false;
+                                          selectedVideos.clear();
+                                        });
+                                      }
+                                      Navigator.of(context).pop();
+                                    },
                                   ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: const Text('Cancel'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
+                                  TextButton(
+                                    child: Text(
+                                      'Delete',
+                                      style: TextStyle(
+                                          color: Colors.orange.shade700),
                                     ),
-                                    TextButton(
-                                      child: const Text('Delete'),
-                                      onPressed: () {
-                                        _deleteSelectedVideos();
-                                        Navigator.of(context).pop();
-                                        final statisticsBox =
-                                            Hive.box<VideoStatistics>(
-                                                'statistics');
-                                        final now = DateTime.now();
-                                        final period =
-                                            "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+                                    onPressed: () {
+                                      _deleteSelectedVideos();
+                                      Navigator.of(context).pop();
+                                      final statisticsBox =
+                                          Hive.box<VideoStatistics>(
+                                              'statistics');
+                                      final now = DateTime.now();
+                                      final period =
+                                          "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
 
-                                        final existingStatistics =
-                                            statisticsBox.get(period);
-                                        if (existingStatistics != null) {
-                                          existingStatistics.deletedCount += 1;
-                                          statisticsBox.put(
-                                              period, existingStatistics);
-                                        } else {
-                                          final statistics = VideoStatistics(
-                                            period: period,
-                                            addedCount: 0,
-                                            deletedCount: 1,
-                                          );
-                                          statisticsBox.put(period, statistics);
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          }
-                        : null,
-                  ),
-                ],
-              )
-            : AppBar(
-                automaticallyImplyLeading: false,
-                backgroundColor: Colors.black,
-                actions: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const VideoSearchScreen(),
-                            ));
-                      },
-                      icon: Icon(
-                        Icons.search_outlined,
-                        color: Colors.orange.shade700,
-                        size: 30,
-                      )),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                ],
-                title: const Text('Video'),
-              ),
+                                      final existingStatistics =
+                                          statisticsBox.get(period);
+                                      if (existingStatistics != null) {
+                                        existingStatistics.deletedCount += 1;
+                                        statisticsBox.put(
+                                            period, existingStatistics);
+                                      } else {
+                                        final statistics = VideoStatistics(
+                                          period: period,
+                                          addedCount: 0,
+                                          deletedCount: 1,
+                                        );
+                                        statisticsBox.put(period, statistics);
+                                      }
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      : null,
+                ),
+              ],
+            )
+          : AppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.black,
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const VideoSearchScreen(),
+                          ));
+                    },
+                    icon: Icon(
+                      Icons.search_outlined,
+                      color: Colors.orange.shade700,
+                      size: 30,
+                    )),
+                const SizedBox(
+                  width: 10,
+                ),
+              ],
+              title: const Text('Video'),
+            ),
 
-        body: Padding(
-          padding: const EdgeInsets.only(top: 9),
-          child: ValueListenableBuilder(
-            valueListenable: videoBox.listenable(),
-            builder: (context, Box<VideoModel> box, _) {
-              final videos = box.values.toList();
-              //lottie based on condition
-              if (videos.isEmpty) {
-                return Center(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Lottie.asset('assets/images/data.json',
-                        fit: BoxFit.cover, height: 300),
-                    const Text(
-                      'Video is Empty',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 23,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic),
-                    )
-                  ],
-                ));
-              } else {
-                return ListView.separated(
+      body: Padding(
+        padding: const EdgeInsets.only(top: 9),
+        child: ValueListenableBuilder(
+          valueListenable: videoBox.listenable(),
+          builder: (context, Box<VideoModel> box, _) {
+            final videos = box.values.toList();
+            //lottie based on condition
+            if (videos.isEmpty) {
+              return Center(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Lottie.asset('assets/images/data.json',
+                      fit: BoxFit.cover, height: 300),
+                  const Text(
+                    'Video is Empty',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  )
+                ],
+              ));
+            } else {
+              return GestureDetector(
+                child: ListView.separated(
                   itemCount: videos.length,
                   separatorBuilder: (context, index) {
                     return const Divider(
@@ -462,18 +484,6 @@ class _VideoListState extends State<VideoList> {
                                 ),
                             ],
                           ),
-                          //  SizedBox(
-                          //     height: double.infinity,
-                          //     width: 80,
-                          //     child: ClipRRect(
-                          //       borderRadius: BorderRadius.circular(8),
-                          //       child: Image.file(
-                          //         File(
-                          //           video.thumbnailPath!,
-                          //         ),
-                          //         fit: BoxFit.cover,
-                          //       ),
-                          //     )),
                           trailing: IconButton(
                             onPressed: () {
                               setState(() {
@@ -520,29 +530,21 @@ class _VideoListState extends State<VideoList> {
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                           ),
-                          // onTap: () {
-                          //   Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (context) => VideoPlayerWidget(video),
-                          //     ),
-                          //   );
-                          // },
                         ),
                       ),
                     );
                   },
-                );
-              }
-            },
-          ),
+                ),
+              );
+            }
+          },
         ),
-        //add button to add videos
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => _pickVideo(context),
-          backgroundColor: Colors.black,
-          child: const Icon(Icons.add),
-        ),
+      ),
+      //add button to add videos
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _pickVideo(context),
+        backgroundColor: Colors.black,
+        child: const Icon(Icons.add),
       ),
     );
   }
