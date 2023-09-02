@@ -153,7 +153,7 @@ class _VideoListState extends State<VideoList> {
                 title: Text('${selectedVideos.length} selected'),
                 actions: <Widget>[
                   IconButton(
-                    icon: Icon(Icons.select_all),
+                    icon: const Icon(Icons.select_all),
                     onPressed: () {
                       setState(() {
                         if (selectedVideos.length == multipledelete.length) {
@@ -166,26 +166,26 @@ class _VideoListState extends State<VideoList> {
                     },
                   ),
                   IconButton(
-                    icon: Icon(Icons.delete),
+                    icon: const Icon(Icons.delete),
                     onPressed: selectedVideos.isNotEmpty
                         ? () {
                             showDialog(
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  title: Text('Delete Selected Videos'),
-                                  content: Text(
+                                  title: const Text('Delete Selected Videos'),
+                                  content: const Text(
                                     'Are you sure you want to delete the selected videos?',
                                   ),
                                   actions: <Widget>[
                                     TextButton(
-                                      child: Text('Cancel'),
+                                      child: const Text('Cancel'),
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
                                     ),
                                     TextButton(
-                                      child: Text('Delete'),
+                                      child: const Text('Delete'),
                                       onPressed: () {
                                         _deleteSelectedVideos();
                                         Navigator.of(context).pop();
