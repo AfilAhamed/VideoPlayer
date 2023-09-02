@@ -42,21 +42,18 @@ class _VideoListState extends State<VideoList> {
             "${documentsDir.path}/thumbnails/$videoName.jpg";
 
         await Directory(dirname(thumbnailPath)).create(recursive: true);
-
         await video_thumbnail.VideoThumbnail.thumbnailFile(
           video: videoPath,
           thumbnailPath: thumbnailPath,
           imageFormat: video_thumbnail.ImageFormat.JPEG,
           quality: 50,
         );
-
         return VideoModel(
           name: videoName,
           videoPath: videoPath,
           thumbnailPath: thumbnailPath,
         );
       }));
-
       await videoBox.addAll(videosToAdd);
 
       // Show a success snackbar if video geted
@@ -74,12 +71,10 @@ class _VideoListState extends State<VideoList> {
           duration: const Duration(seconds: 1),
         ),
       );
-
       //-------------
       // chart calculation of video added
       final now = DateTime.now();
       final statisticsBox = Hive.box<VideoStatistics>('statistics');
-
       final periods =
           "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
 
