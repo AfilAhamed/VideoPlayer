@@ -423,14 +423,6 @@ class StatisticsChart extends StatelessWidget {
           position: charts.BehaviorPosition.top, // Legend at the top
           desiredMaxRows: 2, // Limit to 2 rows for better alignment
         ),
-        // charts.ChartTitle(
-        //   'Count', // Y-axis title
-        //   behaviorPosition: charts.BehaviorPosition.start,
-        // ),
-        // charts.ChartTitle(
-        //   'Period', // X-axis title
-        //   behaviorPosition: charts.BehaviorPosition.bottom,
-        // ),
       ],
     );
   }

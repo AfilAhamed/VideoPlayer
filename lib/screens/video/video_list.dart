@@ -111,14 +111,38 @@ class _VideoListState extends State<VideoList> {
   void _deleteSelectedVideos() {
     final videoBox = Hive.box<VideoModel>('videos');
     final List<int> selectedIndices = selectedVideos.toList();
-    selectedIndices.sort((a, b) =>
-        b.compareTo(a)); // Sort in reverse order to avoid index issues
+    selectedIndices.sort((a, b) => b.compareTo(a));
+
+    int totalDeletedCount =
+        0; // Initialize a variable to keep track of total deleted count
+
     for (int index in selectedIndices) {
       final video = videoBox.getAt(index);
       if (video != null) {
         videoBox.deleteAt(index);
+        totalDeletedCount++; // Increase the count for each deleted video
       }
     }
+
+    // Update the chart statistics based on the totalDeletedCount
+    final statisticsBox = Hive.box<VideoStatistics>('statistics');
+    final now = DateTime.now();
+    final period =
+        "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+
+    final existingStatistics = statisticsBox.get(period);
+    if (existingStatistics != null) {
+      existingStatistics.deletedCount += totalDeletedCount;
+      statisticsBox.put(period, existingStatistics);
+    } else {
+      final statistics = VideoStatistics(
+        period: period,
+        addedCount: 0,
+        deletedCount: totalDeletedCount, // Update with the total count
+      );
+      statisticsBox.put(period, statistics);
+    }
+
     setState(() {
       _isSelecting = false;
       selectedVideos.clear();
@@ -205,27 +229,27 @@ class _VideoListState extends State<VideoList> {
                                     onPressed: () {
                                       _deleteSelectedVideos();
                                       Navigator.of(context).pop();
-                                      final statisticsBox =
-                                          Hive.box<VideoStatistics>(
-                                              'statistics');
-                                      final now = DateTime.now();
-                                      final period =
-                                          "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+                                      // final statisticsBox =
+                                      //     Hive.box<VideoStatistics>(
+                                      //         'statistics');
+                                      // final now = DateTime.now();
+                                      // final period =
+                                      //     "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
 
-                                      final existingStatistics =
-                                          statisticsBox.get(period);
-                                      if (existingStatistics != null) {
-                                        existingStatistics.deletedCount += 1;
-                                        statisticsBox.put(
-                                            period, existingStatistics);
-                                      } else {
-                                        final statistics = VideoStatistics(
-                                          period: period,
-                                          addedCount: 0,
-                                          deletedCount: 1,
-                                        );
-                                        statisticsBox.put(period, statistics);
-                                      }
+                                      // final existingStatistics =
+                                      //     statisticsBox.get(period);
+                                      // if (existingStatistics != null) {
+                                      //   existingStatistics.deletedCount += 1;
+                                      //   statisticsBox.put(
+                                      //       period, existingStatistics);
+                                      // } else {
+                                      //   final statistics = VideoStatistics(
+                                      //     period: period,
+                                      //     addedCount: 0,
+                                      //     deletedCount: 1,
+                                      //   );
+                                      //   statisticsBox.put(period, statistics);
+                                      // }
                                     },
                                   ),
                                 ],
