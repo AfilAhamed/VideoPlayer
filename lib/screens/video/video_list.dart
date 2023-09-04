@@ -229,27 +229,6 @@ class _VideoListState extends State<VideoList> {
                                     onPressed: () {
                                       _deleteSelectedVideos();
                                       Navigator.of(context).pop();
-                                      // final statisticsBox =
-                                      //     Hive.box<VideoStatistics>(
-                                      //         'statistics');
-                                      // final now = DateTime.now();
-                                      // final period =
-                                      //     "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
-
-                                      // final existingStatistics =
-                                      //     statisticsBox.get(period);
-                                      // if (existingStatistics != null) {
-                                      //   existingStatistics.deletedCount += 1;
-                                      //   statisticsBox.put(
-                                      //       period, existingStatistics);
-                                      // } else {
-                                      //   final statistics = VideoStatistics(
-                                      //     period: period,
-                                      //     addedCount: 0,
-                                      //     deletedCount: 1,
-                                      //   );
-                                      //   statisticsBox.put(period, statistics);
-                                      // }
                                     },
                                   ),
                                 ],
