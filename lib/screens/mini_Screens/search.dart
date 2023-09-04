@@ -59,9 +59,9 @@ class VideoSearchScreenState extends State<VideoSearchScreen> {
                     onPressed: () {
                       _searchController.clear();
                     },
-                    icon: const Icon(
+                    icon:const Icon(
                       Icons.clear,
-                      color: Colors.blue,
+                      color: Colors.orange,
                     )),
                 hintText: 'Search here...',
                 hintStyle: const TextStyle(color: Colors.black, fontSize: 20),

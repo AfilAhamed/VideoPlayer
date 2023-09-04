@@ -38,15 +38,15 @@ class SettingsScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(50)),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.info_outline_rounded,
-                          color: Colors.white, size: 33),
-                      SizedBox(
+                          color: Colors.orange.shade700, size: 33),
+                      const SizedBox(
                         width: 15,
                       ),
-                      Text(
+                      const Text(
                         'About',
                         style: TextStyle(color: Colors.white, fontSize: 21),
                       )
@@ -70,15 +70,15 @@ class SettingsScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(50)),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.sticky_note_2_outlined,
-                          color: Colors.white, size: 33),
-                      SizedBox(
+                          color: Colors.orange.shade700, size: 33),
+                      const SizedBox(
                         width: 2,
                       ),
-                      Text(
+                      const Text(
                         'Terms & Condition',
                         style: TextStyle(
                           color: Colors.white,
@@ -107,7 +107,7 @@ class SettingsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.restart_alt_outlined,
-                          color: Colors.white, size: 33),
+                          color: Colors.orange, size: 33),
                       SizedBox(
                         width: 10,
                       ),
@@ -138,7 +138,7 @@ class SettingsScreen extends StatelessWidget {
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.logout, color: Colors.white, size: 33),
+                      Icon(Icons.logout, color: Colors.orange, size: 33),
                       SizedBox(
                         width: 15,
                       ),
