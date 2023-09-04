@@ -23,18 +23,18 @@ class TermsConditon extends StatelessWidget {
                                   Introduction 
         
         
-        Welcome to X-Player App,\n
-            These Terms of Service govern your use of our website located at lala.com (together or individually “Service”) operated by X-Player App.\n
+        Welcome to Infinity Player App,\n
+            These Terms of Service govern your use of our website located at lala.com (together or individually “Service”) operated by Infinity Player App.\n
             Our Privacy Policy also governs your use of our Service and explains how we collect, safeguard and disclose information that results from your use of our web pages.
             
 1.Agreement
 
             Your agreement with us includes these Terms and our Privacy Policy (“Agreements”). You acknowledge that you have read and understood Agreements, and agree to be bound of them.
-            If you do not agree with (or cannot comply with) Agreements, then you may not use the Service, but please let us know by emailing at afilahamed007@gmail.com so we can try to find a solution. These Terms apply to all visitors, users and others who wish to access or use Service.
+            If you do not agree with (or cannot comply with) Agreements, then you may not use the Service, but please let us know by emailing at afilahamed0007@gmail.com so we can try to find a solution. These Terms apply to all visitors, users and others who wish to access or use Service.
             
 2. Communications
         
-            By using our Service, you agree to subscribe to newsletters, marketing or promotional materials and other information we may send. However, you may opt out of receiving any, or all, of these communications from us by following the unsubscribe link or by emailing at afilahamed007@gmail.com.
+            By using our Service, you agree to subscribe to newsletters, marketing or promotional materials and other information we may send. However, you may opt out of receiving any, or all, of these communications from us by following the unsubscribe link or by emailing at afilahamed0007@gmail.com.
             
 3. Contests, Sweepstakes and Promotions
         
@@ -42,7 +42,7 @@ class TermsConditon extends StatelessWidget {
             
 4. Content 
         
-            content found on or through this Service are the property of X-Player App or used with permission. You may not distribute, modify, transmit, reuse, download, repost, copy, or use said Content, whether in whole or in part, for commercial purposes or for personal gain, without express advance written permission from us.
+            content found on or through this Service are the property of Infinity Player App or used with permission. You may not distribute, modify, transmit, reuse, download, repost, copy, or use said Content, whether in whole or in part, for commercial purposes or for personal gain, without express advance written permission from us.
             
 5. Prohibited Uses
         
@@ -74,12 +74,12 @@ class TermsConditon extends StatelessWidget {
             
 8. Intellectual Property
         
-            Service and its original content (excluding Content provided by users), features and functionality are and will remain the exclusive property of X-Player App and its licensors. Service is protected by copyright, trademark, and other laws of  and foreign countries. Our trademarks may not be used in connection with any product or service without the prior written consent of lie App.
+            Service and its original content (excluding Content provided by users), features and functionality are and will remain the exclusive property of Infinity Player App and its licensors. Service is protected by copyright, trademark, and other laws of  and foreign countries. Our trademarks may not be used in connection with any product or service without the prior written consent of lie App.
             
 9. Copyright Policy
         
             We respect the intellectual property rights of others. It is our policy to respond to any claim that Content posted on Service infringes on the copyright or other intellectual property rights (“Infringement”) of any person or entity.
-            If you are a copyright owner, or authorized on behalf of one, and you believe that the copyrighted work has been copied in a way that constitutes copyright infringement, please submit your claim via email to afilahamed007@gmail.com, with the subject line: “Copyright Infringement” and include in your claim a detailed description of the alleged Infringement as detailed below, under “DMCA Notice and Procedure for Copyright Infringement Claims”
+            If you are a copyright owner, or authorized on behalf of one, and you believe that the copyrighted work has been copied in a way that constitutes copyright infringement, please submit your claim via email to afilahamed0007@gmail.com, with the subject line: “Copyright Infringement” and include in your claim a detailed description of the alleged Infringement as detailed below, under “DMCA Notice and Procedure for Copyright Infringement Claims”
             You may be held accountable for damages (including costs and attorneys fees) for misrepresentation or bad-faith claims on the infringement of any Content found on and/or through Service on your copyright.
             
 10. DMCA Notice and Procedure for Copyright Infringement Claims
@@ -91,16 +91,16 @@ class TermsConditon extends StatelessWidget {
             0.4. your address, telephone number, and email address;
             0.5. a statement by you that you have a good faith belief that the disputed use is not authorized by the copyright owner, its agent, or the law;
             0.6. a statement by you, made under penalty of perjury, that the above information in your notice is accurate and that you are the copyright owner or authorized to act on the copyright owners behalf.
-            You can contact our Copyright Agent via email at afilahamed007@gmail.com.
+            You can contact our Copyright Agent via email at afilahamed0007@gmail.com.
             
 11. Error Reporting and Feedback
         
-            You may provide us either directly at afilahamed007@gmail.com or via third party sites and tools with information and feedback concerning errors, suggestions for improvements, ideas, problems, complaints, and other matters related to our Service (“Feedback”). You acknowledge and agree that: (i) you shall not retain, acquire or assert any intellectual property right or other right, title or interest in or to the Feedback; (ii) Company may have development ideas similar to the Feedback; (iii) Feedback does not contain confidential information or proprietary information from you or any third party; and (iv) Company is not under any obligation of confidentiality with respect to the Feedback. In the event the transfer of the ownership to the Feedback is not possible due to applicable mandatory laws, you grant Company and its affiliates an exclusive, transferable, irrevocable, free-of-charge, sub-licensable, unlimited and perpetual right to use (including copy, modify, create derivative works, publish, distribute and commercialize) Feedback in any manner and for any purpose.
+            You may provide us either directly at afilahamed0007@gmail.com or via third party sites and tools with information and feedback concerning errors, suggestions for improvements, ideas, problems, complaints, and other matters related to our Service (“Feedback”). You acknowledge and agree that: (i) you shall not retain, acquire or assert any intellectual property right or other right, title or interest in or to the Feedback; (ii) Company may have development ideas similar to the Feedback; (iii) Feedback does not contain confidential information or proprietary information from you or any third party; and (iv) Company is not under any obligation of confidentiality with respect to the Feedback. In the event the transfer of the ownership to the Feedback is not possible due to applicable mandatory laws, you grant Company and its affiliates an exclusive, transferable, irrevocable, free-of-charge, sub-licensable, unlimited and perpetual right to use (including copy, modify, create derivative works, publish, distribute and commercialize) Feedback in any manner and for any purpose.
             
 12. Links To Other Web Sites
         
             Our Service may contain links to third party web sites or services that are not owned or controlled by BeatBox App.
-            X-Player App has no control over, and assumes no responsibility for the content, privacy policies, or practices of any third party web sites or services. We do not warrant the offerings of any of these entities/individuals or their websites.
+            Infinity Player App has no control over, and assumes no responsibility for the content, privacy policies, or practices of any third party web sites or services. We do not warrant the offerings of any of these entities/individuals or their websites.
             For example, the outlined Terms and Conditions generator/a is an easy-to-use free tool for creating an excellent standard Terms of Service template for a website, blog, e-commerce store or app.
             YOU ACKNOWLEDGE AND AGREE THAT COMPANY SHALL NOT BE RESPONSIBLE OR LIABLE, DIRECTLY OR INDIRECTLY, FOR ANY DAMAGE OR LOSS CAUSED OR ALLEGED TO BE CAUSED BY OR IN CONNECTION WITH USE OF OR RELIANCE ON ANY SUCH CONTENT, GOODS OR SERVICES AVAILABLE ON OR THROUGH ANY SUCH THIRD PARTY WEB SITES OR SERVICES.
             WE STRONGLY ADVISE YOU TO READ THE TERMS OF SERVICE AND PRIVACY POLICIES OF ANY THIRD PARTY WEB SITES OR SERVICES THAT YOU VISIT.
@@ -148,7 +148,7 @@ class TermsConditon extends StatelessWidget {
             
 21. Contact Us
         
-            Please send your feedback, comments, requests for technical support by email: afilahamed007@gmail.com.
+            Please send your feedback, comments, requests for technical support by email: afilahamed0007@gmail.com.
             
                     ''',
             style: TextStyle(

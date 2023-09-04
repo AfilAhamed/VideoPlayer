@@ -8,7 +8,7 @@ class About extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        toolbarHeight: 90,
+        toolbarHeight: 70,
         elevation: 0,
         backgroundColor: Colors.black,
         title: const Text(
