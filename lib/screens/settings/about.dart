@@ -21,7 +21,7 @@ class About extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(25),
           child: Text(
-            '''Welcome to our simple video player app named  "X-Video Player", we are dedicated to bringing you a straightforward and enjoyable video playback experience. Our mission is to create a user-friendly platform that allows you to watch your favorite videos with ease.
+            '''Welcome to our simple video player app named  "Infinity Video Player", we are dedicated to bringing you a straightforward and enjoyable video playback experience. Our mission is to create a user-friendly platform that allows you to watch your favorite videos with ease.
       
       With a clean and intuitive interface, our video player app ensures that you can quickly navigate through your video library and start watching your desired content in no time. We believe in simplicity without compromising on functionality, making it perfect for users of all ages and tech-savviness levels.
       

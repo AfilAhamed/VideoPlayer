@@ -1,20 +1,15 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:videoplayer_miniproject/model/chart_model/chart_model.dart';
+import 'package:videoplayer_miniproject/functions/utility_functions/video_function/video.dart';
 import 'package:videoplayer_miniproject/screens/mini_Screens/search.dart';
 import 'package:videoplayer_miniproject/screens/video/video_play.dart';
-import 'package:videoplayer_miniproject/functions/db_functions/db_functions.dart';
+import 'package:videoplayer_miniproject/functions/db_functions/video_db_function/db_functions.dart';
 import '../../Model/video_model/video_model.dart';
 import 'package:lottie/lottie.dart';
 import '../../model/favorite_model/favorite_model.dart';
-import 'package:video_thumbnail/video_thumbnail.dart' as video_thumbnail;
-// ignore: depend_on_referenced_packages
-import 'package:path/path.dart';
 
 class VideoList extends StatefulWidget {
   const VideoList({super.key});
@@ -25,127 +20,22 @@ class VideoList extends StatefulWidget {
 class _VideoListState extends State<VideoList> {
   final TextEditingController _reNameController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  // filepicker function along with thumbnail
-  Future<void> _pickVideo(BuildContext context) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.video,
-      allowMultiple: true,
-    );
-    if (result != null && result.files.isNotEmpty) {
-      final videoBox = Hive.box<VideoModel>('videos');
-      final videosToAdd = await Future.wait(result.files.map((file) async {
-        final String videoPath = file.path!;
-        final String videoName = videoPath.split('/').last;
-        final Directory documentsDir = await getApplicationDocumentsDirectory();
-        final String thumbnailPath =
-            "${documentsDir.path}/thumbnails/$videoName.jpg";
-
-        await Directory(dirname(thumbnailPath)).create(recursive: true);
-        await video_thumbnail.VideoThumbnail.thumbnailFile(
-          video: videoPath,
-          thumbnailPath: thumbnailPath,
-          imageFormat: video_thumbnail.ImageFormat.JPEG,
-          quality: 50,
-        );
-        return VideoModel(
-          name: videoName,
-          videoPath: videoPath,
-          thumbnailPath: thumbnailPath,
-        );
-      }));
-      await videoBox.addAll(videosToAdd);
-
-      // Show a success snackbar if video geted
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          padding:
-              const EdgeInsets.only(bottom: 10, top: 10, left: 10, right: 10),
-          content: Center(
-              child: Text(
-            'Video added successfully',
-            style: TextStyle(
-                color: Colors.orange.shade700, fontWeight: FontWeight.bold),
-          )),
-          backgroundColor: Colors.black,
-          duration: const Duration(seconds: 1),
-        ),
-      );
-      //-------------
-      // chart calculation of video added
-      final now = DateTime.now();
-      final statisticsBox = Hive.box<VideoStatistics>('statistics');
-      final periods =
-          "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
-
-      final existingStatistics = statisticsBox.get(periods);
-      if (existingStatistics != null) {
-        existingStatistics.addedCount += videosToAdd.length;
-        statisticsBox.put(periods, existingStatistics);
-      } else {
-        final statistics = VideoStatistics(
-          period: periods,
-          addedCount: videosToAdd.length,
-          deletedCount: 0,
-        );
-        statisticsBox.put(periods, statistics);
-      }
-    } else {
-      // Show an error snackbar if video didnt get
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          padding: EdgeInsets.only(bottom: 10, top: 10, left: 10, right: 10),
-          content:
-              Center(child: Text('Video didn\'t get added. Please try again.')),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 2),
-        ),
-      );
-    }
-  }
-
   Set<int> selectedVideos = Set<int>();
   bool _isSelecting = false;
 
-  // Function to handle deleting selected videos and multiple
+  // filepicker function along with thumbnail
+  Future<void> _pickVideo(BuildContext context) async {
+    await pickVideo(context);
+  }
+
+  // Function to handle deleting selected videos with multiply.
   void _deleteSelectedVideos() {
-    final videoBox = Hive.box<VideoModel>('videos');
-    final List<int> selectedIndices = selectedVideos.toList();
-    selectedIndices.sort((a, b) => b.compareTo(a));
-
-    int totalDeletedCount =
-        0; // Initialize a variable to keep track of total deleted count
-
-    for (int index in selectedIndices) {
-      final video = videoBox.getAt(index);
-      if (video != null) {
-        videoBox.deleteAt(index);
-        totalDeletedCount++; // Increase the count for each deleted video
-      }
-    }
-
-    // Update the chart statistics based on the totalDeletedCount
-    final statisticsBox = Hive.box<VideoStatistics>('statistics');
-    final now = DateTime.now();
-    final period =
-        "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
-
-    final existingStatistics = statisticsBox.get(period);
-    if (existingStatistics != null) {
-      existingStatistics.deletedCount += totalDeletedCount;
-      statisticsBox.put(period, existingStatistics);
-    } else {
-      final statistics = VideoStatistics(
-        period: period,
-        addedCount: 0,
-        deletedCount: totalDeletedCount, // Update with the total count
-      );
-      statisticsBox.put(period, statistics);
-    }
-
-    setState(() {
-      _isSelecting = false;
-      selectedVideos.clear();
+    //function called here from Video utility function page
+    deleteSelectedVideos(selectedVideos, () {
+      setState(() {
+        _isSelecting = false;
+        selectedVideos.clear();
+      });
     });
   }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:videoplayer_miniproject/model/chart_model/chart_model.dart';
-import '../../Model/video_model/video_model.dart';
+import '../../../Model/video_model/video_model.dart';
 
 //delete from db with a confirmation show dailog..
 

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../../Model/video_model/video_model.dart';
@@ -59,7 +58,7 @@ class VideoSearchScreenState extends State<VideoSearchScreen> {
                     onPressed: () {
                       _searchController.clear();
                     },
-                    icon:const Icon(
+                    icon: const Icon(
                       Icons.clear,
                       color: Colors.orange,
                     )),
