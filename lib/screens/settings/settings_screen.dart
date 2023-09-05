@@ -82,8 +82,7 @@ class SettingsScreen extends StatelessWidget {
                         'Terms & Condition',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
-                          // overflow: TextOverflow.clip
+                          fontSize: 19,
                         ),
                       )
                     ],
