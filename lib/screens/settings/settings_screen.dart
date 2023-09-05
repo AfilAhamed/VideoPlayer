@@ -103,15 +103,15 @@ class SettingsScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(50)),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.restart_alt_outlined,
-                          color: Colors.orange, size: 33),
-                      SizedBox(
+                          color: Colors.orange.shade700, size: 33),
+                      const SizedBox(
                         width: 10,
                       ),
-                      Text(
+                      const Text(
                         'Reset Settings',
                         style: TextStyle(
                           color: Colors.white,
@@ -135,14 +135,15 @@ class SettingsScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(50)),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.logout, color: Colors.orange, size: 33),
-                      SizedBox(
+                      Icon(Icons.logout,
+                          color: Colors.orange.shade700, size: 33),
+                      const SizedBox(
                         width: 15,
                       ),
-                      Text(
+                      const Text(
                         'Exit',
                         style: TextStyle(color: Colors.white, fontSize: 21),
                       )
