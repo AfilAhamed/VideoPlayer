@@ -4,7 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:videoplayer_miniproject/functions/db_functions/favorite_db_function/favorite_functions.dart';
-import 'package:videoplayer_miniproject/screens/favorite/player_favorite.dart';
+import 'package:videoplayer_miniproject/screens/favorite/favorite_player.dart';
 import '../../model/favorite_model/favorite_model.dart';
 
 class FavoriteVideoList extends StatefulWidget {

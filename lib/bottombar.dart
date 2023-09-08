@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:videoplayer_miniproject/screens/favorite/favorite.dart';
+import 'package:videoplayer_miniproject/screens/favorite/favorite_list.dart';
 import 'package:videoplayer_miniproject/screens/video/video_list.dart';
 import 'package:videoplayer_miniproject/screens/chart/chart_screen.dart';
 import 'package:videoplayer_miniproject/screens/settings/settings_screen.dart';

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 import 'package:videoplayer_miniproject/model/favorite_model/favorite_model.dart';
-import 'package:videoplayer_miniproject/screens/favorite/controlls_favorite.dart';
+import 'package:videoplayer_miniproject/screens/favorite/favorite_controlls.dart';
 
 class FavoritePlayer extends StatefulWidget {
   final FavoriteVideoModel favModel;
